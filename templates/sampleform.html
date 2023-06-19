@@ -1,0 +1,26 @@
+<!--get layout from layout.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1 xmlns="http://www.w3.org/1999/html">This is sample form</h1>
+    <form action="/sampleform" method="POST">
+        <div class ="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="stone" name="janken" value=0 checked>
+            <label class="form-check-label" for="stone">Stone</label>
+        </div>
+        <div class ="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="scissors" name="janken" value=1>
+            <label class="form-check-label" for="stone">Scissors</label>
+        </div>
+        <div class ="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="Paper" name="janken" value=2>
+            <label class="form-check-label" for="stone">Paper</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary"> SEND</button>
+    </form>
+</div>
+
+{% endblock %}

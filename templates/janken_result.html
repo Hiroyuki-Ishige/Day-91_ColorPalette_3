@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class ="container mt-4">
+  <h2>Result of JANKEN</h2>
+  <p>Computer: {{judge.computer_hand}}</p>
+  <p>Player: {{judge.player_hand}}</p>
+  <p>Judge: {{judge.judgement}}</p>
+  <p>
+    <a href="{{ url_for('sampleform')}}">Return</a>
+  </p>
+
+</div>
+{% endblock %}

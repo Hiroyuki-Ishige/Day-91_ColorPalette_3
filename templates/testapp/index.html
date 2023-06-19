@@ -1,0 +1,25 @@
+<!--get layout from layout.html -->
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <h1>showing index.html</h1>
+    <p>{{my_dict.insert_something1}}</p>
+    <p>{{my_dict.insert_something2}}</p>
+
+    <h>Show test title</h>
+    <ul>
+        {% for title in my_dict.test_titles %}
+        {% if title == "title2" %}
+        <li>{{ title}}</li>
+        {% elif title == "title3" %}
+        <li>Cannot show because this is title 3</li>
+        {% else %}
+        <li> XXXXX</li>
+
+        {% endif %}
+        {% endfor%}
+
+    </ul>
+
+{% endblock %}
