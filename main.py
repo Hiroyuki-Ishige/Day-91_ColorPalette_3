@@ -1,74 +1,43 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 import random
 from flask_bootstrap import Bootstrap
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = "./uploads"
+# Restrict file extention
+ALLOWED_EXTENTIONS = set(["png", "jpg", "gif"])
 
 app = Flask(__name__)
-bootstrap = Bootstrap(app) # tie app to bootstrap
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+bootstrap = Bootstrap(app)  # tie app to bootstrap
 
-@app.route("/")
-def index():
-    my_dict = {"insert_something1":"This is insert_something1",
-               "insert_something2": "This is insert_something2",
-               "test_titles":["title1", "title2", "title3"]
-               }
 
-    return render_template("testapp/index.html", my_dict = my_dict)
+def allowed_file(filename):
+    # check if there is . in file name
+    # 1 if OK, 0 if NG
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENTIONS
 
-@app.route("/sampleform", methods=["GET", "POST"])
-def sampleform():
-    if request.method =="GET":
-        return render_template("sampleform.html")
 
-    if request.method =="POST":
-        comp = random.randrange(3)
-        if comp == 0:
-            comp_hand = "Computer is Stone"
-        elif comp == 1:
-            comp_hand = "Computer is Scissors"
-        else:
-            comp_hand = "Computer is Paper"
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
 
-        req1 = int(request.form["janken"])
+        #extract data
+        file = request.files['file']
 
-        if req1 == 0:
-            your_hand = 'You are Stone'
-        elif req1 == 1:
-            your_hand = 'You are Scissors'
-        else:
-            your_hand = 'You are Paper'
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
+        return redirect(url_for("uploaded_file", filename=file.filename))
+    elif request.method == 'GET':
+        return render_template('upload.html')
 
-        if comp == req1:
-            result = "draw"
-        elif req1 == 1 and comp ==0:
-            result ="You lose"
 
-        elif req1 == 2 and comp ==0:
-            result ="You win"
-
-        elif req1 == 0 and comp ==1:
-            result ="You win"
-
-        elif req1 == 2 and comp ==1:
-            result ="You lose"
-
-        elif req1 == 0 and comp == 2:
-            result ="You lose"
-
-        elif req1 == 1 and comp == 2:
-            result ="You win"
-
-        judge ={
-            "computer_hand":comp_hand,
-            "player_hand":your_hand,
-            "judgement":result,
-        }
-
-    return render_template("janken_result.html", judge=judge)
-
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-
-#TODO file upload
+# TODO show uploaed file on upload.html
