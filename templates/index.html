@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base_layout.html" %}
 
 {% block content %}
 <h1>File Upload</h1>
@@ -6,5 +6,8 @@
     <p><input type="file" name="file" accept=".jpg,.png" multiple></p>
     <p><input type="submit" value="Submit"></p>
 </form>
+
+<img src="uploads/{{filename}}", width="600", height="400" alt="No photo">
+<img src="{{modified_img}}", alt="No photo">
 
 {% endblock %}

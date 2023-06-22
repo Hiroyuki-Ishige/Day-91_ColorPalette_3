@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_from_directory, redirect
 import random
 from flask_bootstrap import Bootstrap
 import os
+from extract_color import extract_color
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = "./uploads"
@@ -27,9 +28,14 @@ def upload_file():
         file = request.files['file']
 
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
-        return redirect(url_for("uploaded_file", filename=file.filename))
+
+        #to create modified image
+        modified_img = extract_color(input_image=file.filename,resize=300 )
+
+        return render_template('index.html', filename=file.filename, modified_img=modified_img)
     elif request.method == 'GET':
-        return render_template('upload.html')
+        return render_template('index.html')
+
 
 
 @app.route('/uploads/<filename>')
@@ -40,4 +46,4 @@ def uploaded_file(filename):
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
 
-# TODO show uploaed file on upload.html
+# TODO continue upgrading extract_clor.py
