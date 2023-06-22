@@ -24,18 +24,18 @@ def allowed_file(filename):
 def upload_file():
     if request.method == 'POST':
 
-        #extract data
+        # extract data
         file = request.files['file']
 
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
 
-        #to create modified image
-        modified_img = extract_color(input_image=file.filename,resize=300 )
+        # to create modified image
+        modified_img = extract_color(input_image=file.filename, resize=300, tolerance=30, zoom=6)
+        print(modified_img)
 
         return render_template('index.html', filename=file.filename, modified_img=modified_img)
     elif request.method == 'GET':
         return render_template('index.html')
-
 
 
 @app.route('/uploads/<filename>')
